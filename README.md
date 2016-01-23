@@ -17,13 +17,17 @@ It creates a Color Palette of the song using my algorithm:
   2. 12-dimensional vector of timbre features for each segment.
   3. Hierarchical clustering of segment vectors. 
   4. Flatten hierarchy to one dimensional array. Similar to how you would turn a binary tree into a linked list.
-    <img src="./flattening-tree.png">
+    <img src="./flattening-tree.png" height=400>
   5. Map to hue. 
+
+<img src="ui.png" align=right>
+
 
 #### Build rhythms with color
   * Euclidean rhythms sound really good
   * Concatenative Synthesis is good for glitch/textures/rhythms
   * Export loops and drag them into your DAW (Ableton Live, etc)
+
 
 #### Jam with keyboard
   * Press key and save loop.
@@ -31,10 +35,37 @@ It creates a Color Palette of the song using my algorithm:
   * Hit ` to open Chaos Notes. Store composition notes inside. 
   * Loops are saved to database, updated concurrently for any user on that same page. 
 
-### Efficient Production
+#### Efficient Production
   * Instead of sequencing, build new parts by exploring the space of permutations of old songs
   * Speeds up my music *tenfold*
   * Good for teaching beginners
+
+## Options
+#### Segment choice
+  * **Chaos** randomize segments
+  * **Order** segments don't change
+
+#### Short segment behavior
+  * **Flows** segment continues on as it would in the original song (which may introduce new timbre) before jumping to next segment in loop
+  * **Gaps** segments end abruptly, introducing silence before next segment in loop
+
+#### Loop Behavior
+  * **Forever** Loop loops
+  * **Once** Loop plays once, then silence
+  * **And so on** after loop, final segment continues on as it would in the original song
+
+#### Layer
+ * **On Earth** Layer 1. All loops on layer 1 interrupt each other, but do not interrupt others.
+ * **On Neptune** Layer 2. All loops on layer 2 interrupt each other, but do not interrupt others.
+ * **In Space** No layer. These loops cannot be interrupted. Only the pause button can stop them. 
+
+### Presets
+ * **def** Order flows forever on Earth; default loop pattern
+ * **hit** Order gaps once in space; one-time hit
+ * **bm** Order flows and so on on Earth; BookMark a point in the song
+ * **grain** Order flows forever on Earth, hi-tempo; for granular textures
+ * **key** Chaos flows once on neptune, very-high tempo; for pitched granularity when controlling with a midi keyboard
+ * **infinite layer** Chaos flows once in space; building up heavy textures
 
 # TODO
   * Combining this a body-controlled MIDI interface. (Fuck being on stage, be in the audience and make music by dancing)
