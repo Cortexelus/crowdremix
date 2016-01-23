@@ -20,18 +20,33 @@ It creates a Color Palette of the song using my algorithm:
     <img src="./flattening-tree.png">
   5. Map to hue. 
 
-Now build rhythms with color, it's really simple. 
+#### Build rhythms with color
   * Euclidean rhythms sound really good
-  *  Concatenative Synthesis is good for glitch/textures/rhythms
+  * Concatenative Synthesis is good for glitch/textures/rhythms
+  * Export loops and drag them into your DAW (Ableton Live, etc)
 
-Jam with your keyboard. 
+#### Jam with keyboard
   * Press key and save loop.
   * Recall with same key. 
   * Hit ` to open Chaos Notes. Store composition notes inside. 
   * Loops are saved to database, updated concurrently for any user on that same page. 
 
+### Efficient Production
+  * Instead of sequencing, build new parts by exploring the space of permutations of old songs
+  * Speeds up my music *tenfold*
+  * Good for teaching beginners
+
 Now I can finally fulfill my dream of collaborating with EVERYONE I meet.
 
-Imagine combining this a body-controlled MIDI interface? Fuck being on stage, be in the audience and make music by dancing!
-
-Combining the internet world of crowd source remix, with local music collaboration, with audience-immersive performance -- the ultimate in bringing the world together with music. 
+# TODO
+  * Combining this a body-controlled MIDI interface. (Fuck being on stage, be in the audience and make music by dancing)
+  * Collaborate with as many musicians as possible. 
+  * Teach be
+  * Release music video remixer
+  * Option to upload music
+  * Option to remix soundcloud, youtube, bandcamp
+  * Use state machines to build automated indeterminate patterns
+    * "Learn" from how user plays sampler; then continues to play on its own
+    * Markov model of sampler triggers
+    * A node in one state machine can be another state machine, which allows for large complexity of patterns
+    * See http://remix.army for my future plans
