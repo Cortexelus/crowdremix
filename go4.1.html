@@ -1,0 +1,254 @@
+<html>
+<head>
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="js/clusterfck.js"></script>
+		    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/theme.css" rel="stylesheet">
+
+    <!-- bootstrap slider -->
+    <link href="css/slider.css" rel="stylesheet">
+
+
+</head>
+<body>
+  <div id="loading-audio" style="text-align: center">
+      <div style="color: #ccc; font-size: 2.2em; margin: 38px">analyzing audio <img src="http://www.vale.com/EN/aboutvale/initiatives/itabiritos/PublishingImages/ProjetoItabiritos/loading.gif"></div>
+  </div>
+
+  <div id="loading-redirect" style="text-align: center; display: none">
+      <div style="color: #ccc; font-size: 2.2em; margin: 38px">ready set... 
+
+<form id="form_submission" method="POST" action="crowdremix4.php">
+  <input type="hidden" name="jsonstring" id="jsonstring" value="">
+  <input type="submit" value="GO" id="go-button" style="display: none">
+</form>
+
+</div>
+  </div>
+
+
+<script>
+
+
+/* updated palette algorithm:
+1) hierarchically cluster segments
+2) flatten hierarchy
+BAM! new palette.
+*/
+var soundpalette_algorithm_version = 1;
+function make_palette(segments){
+
+	data = segments.map(function(s,i){ 
+		return [i,s.timbre] 
+		// attaching the segment_id to each vector. 
+		// I tweaked clusterfck.js to recognize this [int,array] pattern
+	})
+
+	var clusters = clusterfck.hcluster(data);
+
+	function flatten(obj){
+	  if(obj.hasOwnProperty("value")){
+	    return [obj.value];
+	  }
+	  if(obj.hasOwnProperty("left")){
+	    return flatten(obj.left).concat(flatten(obj.right))
+	  }
+	}
+	flat_clusters = flatten(clusters)
+	// flattening hierarchical clustering is better than PCA
+	// because sorting by PCA doesn't preserve local connectivity, it jumps all over the place.
+	// However, there are 2^n different trees with the same hierarchy.
+	// We can further optimize our sorting.
+	// We should flattening the tree which leaves the least distance between leaves.
+	// We don't want Traveling Salesman, or Genetic algorithms, they are too slow. 
+	// Instead we shall use a heuristic to approximate a better sorting in O(n) time. 
+	// For every pair of pairs, we make sure the inner two clusters have the shortest distance between their centroids. 
+	// We repeat all the way down. 
+	// Bam. Easy sauce.
+	// ~emperorcj
+
+
+
+
+	segment_ids = flat_clusters.map(function(s){return s[0]});
+
+	seg_distances = [0]
+	total_distance = 0 
+	num_segs = flat_clusters.length;
+	for(var s=0;s<num_segs-1;s++){
+
+		var total = 0;
+		for (var i = 0; i < flat_clusters[s][1].length; i++) {
+	        total += Math.pow(flat_clusters[s][1][i] - flat_clusters[s+1][1][i], 2);      
+	    }
+	    seg_distances.push(total)
+	    total_distance += total
+	}
+
+	distance_sum = 0
+	palette_hues = seg_distances.map(function(d){
+		distance_sum += d
+		hue = (distance_sum/total_distance) * 0.8; // 0.8 to remove pinks/reds at the end, since path isn't cyclic
+		return hue
+	});
+
+
+
+	return {
+		'segments': segments,
+		'palette_hues': palette_hues,
+		'segment_ids': segment_ids
+	}
+}
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+
+
+// given an echonest track ID like  TRYKHJA13AFD229CC8
+// it builds a palette, grabs song URL from static.echonest.com
+function buildPaletteFromEchoNestTrackID(trid){
+	var url = "http://static.echonest.com/infinite_jukebox_data/"+trid+".json";
+	$.getJSON( url, function( data ) {
+		console.log(data)
+		track = data.response.track;
+		if(track.id != trid){
+			console.log("TRID doesn't match")
+		}else{
+			song_url = track.info.url;
+			if(song_url.length == 0){
+				console.log("no song_url")
+			}else{
+				artist = track.info.artist;
+				title = track.info.title;
+				segments = track.analysis.segments;
+				analyze(song_url, artist, title, segments);
+			}
+		}
+	});
+}
+
+function analyze(song_url, artist, title, segments){
+	// k we have song_url, let's see if we've analyzed this song before....
+	console.log("should we analyze this?");
+	$.ajax({
+		type: 'POST',
+		url: 'loyalminion.php',
+		data: {'decree': 'should we analyze?',
+			'song_url': song_url, 
+			'soundpalette_algorithm_version': soundpalette_algorithm_version},
+		success: function(response) {
+			console.log(response);
+			response = $.parseJSON(response);
+			if(response["msg"] == "yes"){
+				// okay, analyze the song then! 
+				json_palette = make_palette(segments);
+
+				// done with analysis.. uploading...
+				console.log("done with analysis..uploading");
+				$.ajax({
+					type: 'POST',
+					url: 'loyalminion.php',
+					data: {'decree': 'prepare the arrangements',
+						'songdata': {
+							"song_url" : song_url,
+							"artist" : artist,
+							"title" : title,
+							"soundpalette_algorithm_version" : soundpalette_algorithm_version},
+						"segments_palette" : JSON.stringify(json_palette)},
+					success: function(response) {
+						console.log("blerh",response);
+						response = $.parseJSON(response);
+						if(response["roomname"]){
+							// analysis uploaded, room created
+							console.log("roomname "+response["roomname"])
+							redirect_to_room(response["roomname"]);
+						}else{
+							console.log("fail");
+						}
+					}
+				});
+
+
+			}else if(response["roomname"]){
+				// we've already analyzed this song, and the analysis is up to date
+				console.log("roomname "+response["roomname"])
+				redirect_to_room(response["roomname"]);
+			}else{
+				console.log("fail");
+			}
+		}
+	});
+}
+
+// ECHONEST ANALYSIS
+function analyzeAudio(song_url, tag, callback) {
+    var url = 'http://labs.echonest.com/Uploader/qanalyze?callback=?'
+    $.getJSON(url, { url:audio, tag:tag}, function(data) {
+        if (data.status === 'done' || data.status === 'error') {
+            callback(data);
+        } else {
+            $("#info").text(data.status + ' - ready in about ' + data.estimated_wait + ' secs. ');
+            setTimeout(function() { analyzeAudio(audio, tag, callback); }, 8000);
+        } 
+    });
+}
+
+
+var trid = getUrlVars()["trid"];
+if(trid){
+	buildPaletteFromEchoNestTrackID(trid);
+}else{
+	var soundCloudURL = getUrlVars()["sc"];
+	console.log(soundCloudURL);
+	var soundClouddClientID = "72f69b27f62dd38d1fa075a898e5d9a1"; 
+	var echonestAPIkey = "0GYJHLG9FBMWLESVY";
+
+	var scResolveURL = 'http://api.soundcloud.com/resolve.json'
+	$.getJSON(scResolveURL, {client_id:soundClouddClientID, url:soundCloudURL}, function(data) {
+	    var song_url = data.stream_url + '?client_id=' + soundClouddClientID;
+	    var title = data.title;
+	    var artist = data.user.username;
+	    console.log(song_url, title, artist)
+
+	    /*
+	    var echonestRequestURL = "http://developer.echonest.com/api/v4/track/upload";
+	   console.log("downloadURL", downloadURL)
+	   console.log("echonestRequestURL", echonestRequestURL)
+	   $.ajax({ 
+	   		url: echonestRequestURL,
+	   		data: {url: downloadURL,
+	   			api_key: echonestAPIkey},
+	   		type: "GET",
+	   		dataType: "jsonp"
+	   }).done(function(data){
+	   		console.log(data);
+	   });
+	    //http://developer.echonest.com/api/v4/track/profile?api_key=0GYJHLG9FBMWLESVY&format=json&id=TRTLKZV12E5AC92E11&bucket=audio_summary
+	    */
+	});
+
+
+}
+
+
+function redirect_to_room(roomname){
+	//console.log(roomname);
+	window.location.href = 'crowdremix4.1.html?x=' + roomname
+}
+ 
+
+</script>
+
+
+</body></html>

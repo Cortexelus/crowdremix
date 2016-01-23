@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <title>.: neon :.</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/theme.css" rel="stylesheet">
+
+    <!-- bootstrap slider -->
+    <link href="css/slider.css" rel="stylesheet">
+
+    <style>
+
+    .playhead { width: 100%; height: 100%; border: 2px solid #999; position: absolute; top: 0px;  } 
+    .playhead-container { height: 50px; position: relative; cursor:crosshair}
+
+    .palette-mapper { width: 100%; height: 100%; border: 2px solid #999; position: absolute; top: 0px;  } 
+    .palette-mapper-container { height: 50px; position: relative; cursor:crosshair; margin-top: 15px;}
+
+    /* .rhythm-display { width: 100%; height: 100%; border: 2px solid #999; position: absolute; top: 0px;  }  */
+    .rhythm-display-container {  width: 302px; height: 10px; position: relative;}
+
+    .song-title { color: #999;}
+
+    #RC .slider-selection {
+      background: #FF8282;
+    }
+    #RC .slider-handle {
+      background: red;
+    }
+    #GC .slider-selection {
+      background: #428041;
+    }
+    #GC .slider-handle {
+      background: green;
+    }
+    #BC .slider-selection {
+      background: #8283FF;
+    }
+    #BC .slider-handle {
+      border-bottom-color: blue;
+    }
+    #step_slider, #pulse_slider, #tempo_slider {
+      width: 300px;
+    }
+    .progress{ width: 300px;}
+
+    .dropdown-menu a { cursor: pointer;}
+
+    .hidethis { display: none;}
+    </style>
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+
+  <body id="thebody">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">neon</a>
+        </div>
+      </div>
+        
+    </div>
+
+    <div class="container theme-showcase">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <!--
+      <div class="jumbotron">
+        <h1>Hello, world!</h1>
+        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+        <p><a href="#" class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+      </div>
+      -->
+     <!-- <ul class="nav nav-tabs" style="margin-bottom: 10px">
+        <li class="active">
+          <a href="#song1" data-target="#song1, #home_help" data-toggle="tab"><span id="song-title"></span></a>
+        </li>
+        <li>
+          <a href="#song2" data-target="#song2, #profile_help" data-toggle="tab"></a>
+        </li>
+      </ul>-->
+
+      <div class=" " style="padding-left: 0px">
+         <div class="tab-content">
+            <div class="tab-pane active fade in" id="song1">
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">
+                    <span id="artist-name"></span>
+                    <span id="song-title" class="song-title"></span>
+                  </h3>
+                </div>
+                <div class="panel-body">
+                  <div id="palette-mapper-container" class="palette-mapper-container">   
+                      <canvas id="palette-mapper" class="palette-mapper"></canvas>  
+                      <canvas id="palette-mapper-highlight" class="palette-mapper"></canvas>  
+                    </div>  
+
+
+                  <div id="playhead-container" class="hidethis playhead-container">   
+                    <canvas id="playhead" class="playhead"></canvas>  
+                    <canvas id="playhead-highlight" class="playhead"></canvas>  
+                  </div>      
+                </div>
+                  
+              </div>
+
+              <div class="panel panel-default">
+                 
+                  <div class="panel-body">
+                    <video src="sounds/glitches-RGB-360p.mp4" id="video" width="100%"/>     
+                  </div>
+                  <script>
+                    video = document.getElementById("video");
+
+                    video.addEventListener("canplaythrough", function () {
+                        console.log("canplaythrough");
+                    }, false);
+                  </script>
+              </div>
+            </div>
+            
+        </div>
+     </div>
+    <div class="col-sm-4 hidethis" style="padding-right: 0px; padding-left: 0px">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Rhythm
+          </h3>
+        </div>
+        <div class="panel-body" >
+          <!-- <div id="rhythm-mapper-container" class="rhythm-mapper-contahiner">   
+            <<canvas id="rhythm-mapper" class="rhythm-mapjper"></canvas>  
+            <canvas id="rhythm-mapper-highlight" class="rhythjm-mapper"></canvas>  
+          </div> -->
+          <p>
+            <b></b>  <span style="float: right" id="ui-steps"></span> <input type="text" class="span2" value="" data-slider-min="1" data-slider-max="16" data-slider-step="1" data-slider-value="8" data-slider-id="RC" id="step_slider" data-slider-tooltip="hide" data-slider-handle="square" >
+          </p>
+          <p>
+            <b></b>  <span style="float: right" id="ui-pulses"></span> <input type="text" class="span2" value="" data-slider-min="1" data-slider-max="16" data-slider-step="1" data-slider-value="3" data-slider-id="GC" id="pulse_slider" data-slider-tooltip="hide" data-slider-handle="round" >
+          </p>
+
+          <div id="rhythm-display-container" class="rhythm-display-container">   
+            <!-- <canvas id="rhythm-display" class="rhythm-display"></canvas>   -->
+          </div>
+
+          <div class="progress" id="rhythm-display">
+            
+          </div>
+
+          <p>
+            <b>Tempo</b> <span style="float: right" id="ui-tempo"></span> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" data-slider-id="BC" id="tempo_slider" data-slider-tooltip="hide" data-slider-handle="triangle" >
+          </p>
+
+          <!-- Single button -->
+          <div class="btn-group">
+            <button type="button" class="btn btn-success" id="saveToWav">
+              Save WAV
+            </button>
+          </div>
+          <!-- 
+          <div id="draggable5" class="draggable ui-widget-content">
+            <p>X</p>
+          </div>
+          -->
+
+        </div>
+
+
+      </div>
+
+
+
+  <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Loops
+          </h3>
+        </div>
+        <div class="panel-body" >
+          <div id="rhythm-display-container2" class="rhythm-display-container">   
+            <!-- <canvas id="rhythm-display" class="rhythm-display"></canvas>   -->
+          </div>
+
+        </div>
+
+        
+      </div>
+
+
+
+    </div> <!-- /container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/holder.js"></script>
+
+    <script src="js/draw-song_newaudio.js"></script>
+    <script src="js/soundengine_new.js"></script>
+    <script src="js/bjorklund.js"></script>
+
+    <script src="js/bootstrap-slider.js"></script>
+
+    <script>  
+      var song = null;
+      var savedLoops = {}
+      $(function init(){
+
+
+        song_file = "amen.wav"
+        song_segments_json_file = "amen.segments.json"
+        song_name = "Amen Break"
+        song_artist = "_ "        
+
+        song_file = "sampz.wav"
+        song_segments_json_file = "sampz.segments.json"
+        song_name = "Sampz"
+        song_artist = "_ "
+
+
+        song_file = "spacefortsynergy.mp3"
+        song_segments_json_file = "spacefortdilly.segments.json"
+        song_name = "Spacefort"
+        song_artist = "Dilly "
+
+
+/*
+        song_file = "damionbrook.wav"
+        song_segments_json_file = "damionbrook.segments.json"
+        song_name = "Damion"
+        song_artist = "Brook "
+        */
+
+/*
+        song_name = "accessvirus"        
+        song_file = song_name + ".mp3"
+        song_segments_json_file = song_name + ".segments.json"
+
+*/
+        song_file = "hardcore.wav"
+        song_segments_json_file = "hardcore.segments.json"
+        song_name = "Hardstyle Samples"
+        song_artist = "CJ"
+
+        song_file = "sounds/fenster-springbreak.mp3"
+        song_segments_json_file = "sounds/fenster-springbreak.segments.json"
+        song_name = "Spring break"
+        song_artist = "Fenster"
+/*
+        song_file = "sounds/viney_drums.mp3"
+        song_video = "sounds/viney_drums.mp4"
+        song_segments_json_file = "sounds/viney_drums.segments.json"
+        song_name = "Drummers"
+        song_artist = "Vine"*/
+
+
+
+//*/
+
+
+
+
+/*
+        song_file = "qoarvox.mp3"
+        song_segments_json_file = "qoarvox.segments.json"
+        song_name = "Qoarvox"
+
+        song_file = "thisislife-roots.mp3"
+        song_segments_json_file = "thisislife-roots.segments.json"
+        song_artist = "This is Life"
+        song_name = "Roots"
+/*
+        song_file = "soundthecall-roots.mp3"
+        song_segments_json_file = "soundthecall-roots.segments.json"
+        song_artist = "Sound The Call"
+        song_name = "Roots"
+
+        song_file = "oldgrowth.mp3"
+        song_segments_json_file = "outgrowth.segments.json"
+        song_artist = "This is Life"
+        song_name = "Old Growth"*/
+
+        $.ajax( song_segments_json_file )
+        .done(function(data) {
+          song = new Song(0,[song_file],song_name,song_artist,data.segments,data.palette);
+          song.randomize_parameters()
+
+          song.have_video = true
+        })
+        .fail(function() {
+          alert( "error" );
+        });
+
+        /*
+        $( "#draggable5" ).draggable({ grid: [ 10,10 ],
+        containment: "parent",
+        drag: function(){
+          return true
+
+        } });*/
+
+
+        // keyboard commands
+        $( "#thebody" ).keydown(function( event ) {
+          /*if ( event.which == 13 ) {
+           event.preventDefault();
+          }*/
+          var k = event.keyCode;
+          if(k>=65 && k<=90){
+            console.log(k)
+            if(k in savedLoops){
+              song.load_loop(savedLoops[k])
+            }else{
+              loop = song.save_loop();
+              savedLoops[k] = loop
+            }
+          }
+        });
+
+        // save to wav
+        $("#saveToWav").click(function(event){
+          loop = song.save_loop();
+          song.export_wav(loop);
+        });
+
+
+      });
+
+
+      /* TODO: concurrency with firebase */
+
+      var myDataRef = new Firebase('https://crowdremix.firebaseio-demo.com/sessions/23');
+      myDataRef.on('child_added', function(snapshot) {
+        var message = snapshot.val();
+        console.log(message.name, message.text);
+      });
+      
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<form action="http://developer.echonest.com/api/v4/track/upload" method="post" enctype="multipart/form-data">
+
+	<input type="file" id="uploadfile" name="uploadfile" />
+	<input type="hidden" id="api_key" name="FILDTEOIK2HBORODV" />
+	<input type="submit" value="upload"  />
+
+</form>
+
+
+<script>
+
+var xhr = new XMLHttpRequest();
+  
+function upload() 
+{
+  var file = document.getElementById("uploadfile");
+ 
+  /* Create a FormData instance */
+  var formData = new FormData();
+  /* Add the file */ 
+  formData.append("track", file.files[0]);
+  formData.append("api_key", "FILDTEOIK2HBORODV");
+
+  xhr.open("post", "http://developer.echonest.com/api/v4/track/upload", true);
+  xhr.setRequestHeader("Content-Type", "multipart/form-data");
+  xhr.send(formData);  /* Send to server */ 
+}
+ 
+/* Check the response status */  
+xhr.onreadystatechange = function() 
+{
+  if (xhr.readyState == 4 && xhr.status == 200) 
+  {
+     console.log("blerh", xhr.statusText);
+  }
+  console.log(xhr.statusText);
+}
+
+
+</script>
