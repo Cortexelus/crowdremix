@@ -36,8 +36,6 @@ It creates a Color Palette of the song using my algorithm:
   * Speeds up my music *tenfold*
   * Good for teaching beginners
 
-Now I can finally fulfill my dream of collaborating with EVERYONE I meet.
-
 # TODO
   * Combining this a body-controlled MIDI interface. (Fuck being on stage, be in the audience and make music by dancing)
   * Collaborate with as many musicians as possible. 
