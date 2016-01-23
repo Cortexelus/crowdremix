@@ -2,6 +2,8 @@
 
 I have created the most powerful concatenative synthesizer / crowd-source remix engine known to man. 
 
+[**Play with Crowd Remix**](http://cortexel.us/crowdremix)
+
 [Listen to example of song created and performed entirely within Crowd Remix](https://cortexelation.bandcamp.com/track/freeedm-etude-op-1-no-1)
 
 # How it works
