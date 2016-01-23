@@ -39,7 +39,7 @@ It creates a Color Palette of the song using my algorithm:
 # TODO
   * Combining this a body-controlled MIDI interface. (Fuck being on stage, be in the audience and make music by dancing)
   * Collaborate with as many musicians as possible. 
-  * Teach be
+  * Teach more people beginner production with this tool
   * Release music video remixer
   * Option to upload music
   * Option to remix soundcloud, youtube, bandcamp
