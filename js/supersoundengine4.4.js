@@ -15,7 +15,8 @@ function load_sound(mp3, callback){
 		source: {},
 		request: new XMLHttpRequest(),
 		init: function(){
-			this.context = new webkitAudioContext();
+			var context = window.AudioContext || window.webkitAudioContext
+                        this.context = new context()
 			this.source = this.context.createBufferSource();
 			var self = this;
 			

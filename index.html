@@ -317,8 +317,9 @@
           <ol><li>Click + drag a portion of the song, or its 
       <span style="color:#b04444;">s</span><span style="color:#dd4444;">o</span><span style="color:#dd8c44;">u</span><span style="color:#ddb744;">n</span><span style="color:#cccc22;">d</span><span style="color:#ffd744;">&nbsp;</span><span style="color:#44cc44;">p</span><span style="color:#40b0a0;">a</span><span style="color:#44cccc;">l</span><span style="color:#4444cd;">e</span><span style="color:#444480;">t</span><span style="color:#804480;">t</span><span style="color:#996299;">e</span>. New sounds! </li>
             <li> Adjust the <b>rhythm</b>.</li>
-            <li> Save good loops by <i>pressing any key.</i></li>
-            <li> Return to loops using <i>those keys.</i> Play this like a sampler!</li>
+            <li> Save good loops by <i>pressing any letter key.</i></li>
+            <li> Play loops with keys</li>
+            <li> Click Export WAV to bounce loops into Ωother audio workstations</li>
           </ol> </p>
      </div>
 
@@ -730,7 +731,7 @@ function saveBankJSON(){
     console.log(savedJSONLoops)
     savedJSONLoops = JSON.stringify(savedJSONLoops)
     console.log(savedJSONLoops)
-    $.post("loyalminion.4.4.php", { decree: "save the banks", roomname: roomname, banks: savedJSONLoops }, function(msg) {
+    $.post("http://cortexel.us/crowdremix/loyalminion.4.4.php", { decree: "save the banks", roomname: roomname, banks: savedJSONLoops }, function(msg) {
       console.log("did you save the banks?");
       console.log(msg)
     });
@@ -1452,7 +1453,7 @@ function init_loops(){
   concurrently_connected = false;
   //load_banks({})
   // load banks
-  $.getJSON("banks/bank-"+roomname+".json", function(bankdata){   
+  $.getJSON("http://cortexel.us/crowdremix/banks/bank-"+roomname+".json", function(bankdata){   
       console.log("bankdata") 
       console.log(bankdata);
       // finally we can load the song
