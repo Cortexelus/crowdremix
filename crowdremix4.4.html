@@ -280,7 +280,7 @@
           <span class="navbar-brand" style="float: left">Crowd Remix [beta]</span>
         </div>
 
-
+        <!--
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <div class="navbar-form navbar-right" role="search">
             <div class="form-group">
@@ -293,7 +293,7 @@
             </ul>
           </div>
           </div>
-        </div>
+        </div>-->
       </div>
     
 
@@ -405,7 +405,7 @@
         </div>
 
        
-          <div id="showMidi"><a style="cursor:pointer">[midi]</a></div>
+          <!--<div id="showMidi"><a style="cursor:pointer">[midi]</a></div>-->
 
       <div id="midiOptions" class="panel panel-default" >
 
@@ -730,7 +730,7 @@ function saveBankJSON(){
     console.log(savedJSONLoops)
     savedJSONLoops = JSON.stringify(savedJSONLoops)
     console.log(savedJSONLoops)
-    $.post("loyalminion.4.4.php", { decree: "save the banks", roomname: roomname, banks: savedJSONLoops }, function(msg) {
+    $.post("http://cortexel.us/crowdremix/loyalminion.4.4.php", { decree: "save the banks", roomname: roomname, banks: savedJSONLoops }, function(msg) {
       console.log("did you save the banks?");
       console.log(msg)
     });
@@ -1377,7 +1377,7 @@ var songloopskey = null;
 
 /* load the room */
 function load_room(roomname){
-  $.post("loyalminion.4.4.php", { decree: "give me room info", roomname: roomname }, function(data) {
+  $.post("http://cortexel.us/crowdremix/loyalminion.4.4.php", { decree: "give me room info", roomname: roomname }, function(data) {
     console.log(data)
     data  = JSON.parse(data);
     json_filename = data["json_filename"]
@@ -1389,7 +1389,7 @@ function load_room(roomname){
     //json_filename = songdata["json_filename"];
     // console.log(json_filename);
     // grab the segment + sound palette json
-    $.getJSON("json/"+json_filename, function(jsondata){    
+    $.getJSON("http://cortexel.us/crowdremix/json/"+json_filename, function(jsondata){    
         //console.log(jsondata);
         // finally we can load the song
          load_song(songdata["song_url"],"",songdata["artist"], songdata["title"], jsondata);
@@ -1452,7 +1452,7 @@ function init_loops(){
   concurrently_connected = false;
   //load_banks({})
   // load banks
-  $.getJSON("banks/bank-"+roomname+".json", function(bankdata){   
+  $.getJSON("http://cortexel.us/crowdremix/banks/bank-"+roomname+".json", function(bankdata){   
       console.log("bankdata") 
       console.log(bankdata);
       // finally we can load the song
