@@ -1257,7 +1257,8 @@ function Loop (song, tempo, steps, pulses, playhead_selections, palette_selectio
 
 		var total_duration = 60 / this.tempo
 
-		var offline = new webkitOfflineAudioContext(song.sound.source.buffer.numberOfChannels,
+		var oac = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+		var offline = new oac(song.sound.source.buffer.numberOfChannels,
 			(total_duration*num_loops + extra_seconds)*song.sound.source.buffer.sampleRate,
 			song.sound.source.buffer.sampleRate)
 		
@@ -1372,9 +1373,7 @@ function forceDownload(blob, filename){
     var link = window.document.createElement('a');
     link.href = url;
     link.download = filename || 'output.wav';
-    var click = document.createEvent("Event");
-    click.initEvent("click", true, true);
-    link.dispatchEvent(click);
+    link.click()
   }
 
 
