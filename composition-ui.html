@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Resizable - Snap to grid</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+  <style>
+  #resizable { width: 150px; height: 50px; padding: 0.5em; }
+  #resizable h3 { text-align: center; margin: 0; }
+
+  #containment-wrapper { width: 95%; height:150px; border:2px solid #ccc; padding: 10px; }
+  h3 { clear: left; }
+
+
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#resizable" ).resizable({
+      grid: 10,
+      maxHeight: 50,
+      minHeight: 50,
+      handles: "w, e"
+    }).draggable({ 
+      grid: [ 20, 20 ],
+      containment: "#containment-wrapper", 
+      scroll: false
+   
+    });
+  });
+  </script>
+</head>
+<body>
+
+<div id="containment-wrapper">
+   
+  <div id="resizable" class="ui-widget-content">
+    <h3 class="ui-widget-header">Grid</h3>
+  </div>
+ 
+</div>
+ 
+</body>
+</html>
